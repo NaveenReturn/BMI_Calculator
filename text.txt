@@ -1,0 +1,85 @@
+//Mainsection
+import  { useState } from 'react';
+import Pagination from './Pagination';
+
+const Mainsection = () => {
+    const items = [
+        // Sample data
+        'Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5',
+        'Item 6', 'Item 7', 'Item 8', 'Item 9', 'Item 10',
+        'Item 11', 'Item 12', 'Item 13', 'Item 14', 'Item 15','Item 15'
+      ];
+      const [currentPage, setCurrentPage] = useState(1);
+      const itemsPerPage = 5;
+    
+      const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+      };
+    
+      // Calculate current items
+      const indexOfLastItem = currentPage * itemsPerPage;
+    //   console.log(indexOfLastItem);
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    //   console.log(indexOfFirstItem);
+      const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+  return (
+    <div className='App'>
+     <h1>React Pagination Example</h1>
+      <ul>
+        {currentItems.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+
+       <Pagination
+        totalItems={items.length}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+         
+       />
+    </div>
+  )
+}
+
+export default Mainsection
+
+
+******************Pagination************************
+import React from 'react'
+import PropTypes from "prop-types";
+const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    // console.log(totalItems,itemsPerPage);
+  const handleClick = (pageNumber) => {
+    onPageChange(pageNumber);
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => handleClick(i)}
+          className={i === currentPage ? 'active' : ''}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
+  };
+
+  return (
+    <div>
+    <div className="pagination">
+      {renderPageNumbers()}
+    </div>
+    </div>
+  )
+}
+Pagination.propTypes = {
+    totalItems:PropTypes.number
+}
+export default Pagination
